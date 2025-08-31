@@ -308,8 +308,6 @@ comentario_actual = None
 @app.route('/comentario', methods=['POST'])
 def obtener_comentario():
     """Endpoint para obtener el comentario actual (del momento)"""
-    global comentario_actual
-    
     try:
         # Para POST, podemos aceptar parámetros en JSON para filtrar o configurar la respuesta
         data = request.get_json() if request.is_json else {}
@@ -334,7 +332,6 @@ def obtener_comentario():
 @app.route('/comentario', methods=['GET'])
 def enviar_analisis():
     """Endpoint para enviar el análisis del comentario (comentario + categoría + tags)"""
-    global comentario_actual
     
     try:
         # Para GET, obtenemos los datos de los query parameters
