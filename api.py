@@ -307,27 +307,56 @@ comentario_actual = None
 
 @app.route('/comentario', methods=['POST'])
 def obtener_comentario():
-    """Endpoint para obtener el comentario actual (del momento)"""
+    """Endpoint para recibir un comentario y establecerlo como comentario actual"""
+    global comentario_actual
+    
     try:
-        # Para POST, podemos aceptar parámetros en JSON para filtrar o configurar la respuesta
         data = request.get_json() if request.is_json else {}
         
-        if data is None:
-            return jsonify({
-                "error": "No hay comentario disponible en este momento"
-            }), 404
+        # Extraer el comentario de data
+        if 'comentario' in data:
+            comentario_actual = data['comentario']
+        elif 'text' in data:
+            comentario_actual = data['text']
+        elif isinstance(data, str):
+            comentario_actual = data
+        else:
+            # Si data tiene solo un valor string, usarlo
+            if len(data) == 1:
+                comentario_actual = list(data.values())[0]
+            else:
+                comentario_actual = str(data)
         
         return jsonify({
             "success": True,
             "data": {
-                "comentario": data
-            }
+                "comentario": comentario_actual,
+                "data_recibida": data  # Para debug
+            },
+            "message": "Comentario recibido y guardado exitosamente"
         })
     
     except Exception as e:
         return jsonify({
             "error": f"Error interno del servidor: {str(e)}"
         }), 500
+
+@app.route('/comentario/actual', methods=['GET'])
+def obtener_comentario_actual():
+    """Endpoint para obtener el comentario actual guardado"""
+    global comentario_actual
+    
+    if comentario_actual is None:
+        return jsonify({
+            "error": "No hay comentario disponible en este momento"
+        }), 404
+    
+    return jsonify({
+        "success": True,
+        "data": {
+            "comentario": comentario_actual
+        }
+    })
 
 @app.route('/comentario', methods=['GET'])
 def enviar_analisis():
