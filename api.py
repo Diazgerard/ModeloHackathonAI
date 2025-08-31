@@ -300,7 +300,7 @@ available_tags = load_tags()
 # Variable global para almacenar el comentario actual
 comentario_actual = None
 
-@app.route('/comentario', methods=['GET'])
+@app.route('/comentario', methods=['POST'])
 def obtener_comentario():
     """Endpoint para obtener el comentario actual (del momento)"""
     global comentario_actual
@@ -317,7 +317,7 @@ def obtener_comentario():
         }
     })
 
-@app.route('/comentario', methods=['POST'])
+@app.route('/comentario', methods=['GET'])
 def enviar_analisis():
     """Endpoint para enviar el análisis del comentario (comentario + categoría + tags)"""
     global comentario_actual
