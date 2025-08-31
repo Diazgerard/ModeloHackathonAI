@@ -370,17 +370,39 @@ def procesar_comentario_actual():
                 "error": "No hay comentario disponible para procesar. Envía primero un comentario con POST."
             }), 404
         
-        # Procesar el comentario con IA
+        # Procesar el comentario con IA completo
+        
+        # 1. Validar coherencia del texto
+        is_coherent = is_coherent_text(comentario_actual)
+        
+        if not is_coherent:
+            return jsonify({
+                "error": "El comentario no es coherente o no tiene suficiente contenido válido",
+                "comentario_recibido": comentario_actual
+            }), 400
+        
+        # 2. Categorizar el comentario
         categoria = categorize_comment(comentario_actual)
+        
+        # 3. Extraer tags
         tags = extract_tags_from_text(comentario_actual, available_tags)
+        
+        # 4. Si es una queja (hate speech), formalizarlo
+        comentario_final = comentario_actual
+        comentario_formalizado = None
+        
+        if categoria == "Queja":
+            comentario_formalizado = formalize_hate_speech(comentario_actual)
         
         # Crear el análisis completo
         analysis_data = {
             "id": len(load_analysis_history()) + 1,
             "timestamp": datetime.now().isoformat(),
-            "comentario": comentario_actual,
+            "comentario_original": comentario_actual,
+            "comentario_formalizado": comentario_formalizado,  # Solo si es Queja
             "categoria": categoria,
-            "tags": tags
+            "tags": tags,
+            "is_coherent": is_coherent
         }
         
         # Guardar el análisis
