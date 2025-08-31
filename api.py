@@ -305,17 +305,26 @@ def obtener_comentario():
     """Endpoint para obtener el comentario actual (del momento)"""
     global comentario_actual
     
-    if comentario_actual is None:
+    try:
+        # Para POST, podemos aceptar parámetros en JSON para filtrar o configurar la respuesta
+        data = request.get_json() if request.is_json else {}
+        
+        if comentario_actual is None:
+            return jsonify({
+                "error": "No hay comentario disponible en este momento"
+            }), 404
+        
         return jsonify({
-            "error": "No hay comentario disponible en este momento"
-        }), 404
+            "success": True,
+            "data": {
+                "comentario": comentario_actual
+            }
+        })
     
-    return jsonify({
-        "success": True,
-        "data": {
-            "comentario": comentario_actual
-        }
-    })
+    except Exception as e:
+        return jsonify({
+            "error": f"Error interno del servidor: {str(e)}"
+        }), 500
 
 @app.route('/comentario', methods=['GET'])
 def enviar_analisis():
@@ -323,34 +332,32 @@ def enviar_analisis():
     global comentario_actual
     
     try:
-        data = request.get_json()
+        # Para GET, obtenemos los datos de los query parameters
+        comment = request.args.get('comentario', '').strip()
+        categoria = request.args.get('categoria', '').strip()
+        tags_param = request.args.get('tags', '')
         
-        required_fields = ['comentario', 'categoria', 'tags']
-        missing_fields = [field for field in required_fields if field not in data]
+        # Convertir tags de string a lista (formato: "tag1,tag2,tag3")
+        if tags_param:
+            tags = [tag.strip() for tag in tags_param.split(',') if tag.strip()]
+        else:
+            tags = []
         
-        if missing_fields:
-            return jsonify({
-                "error": f"Faltan los siguientes campos requeridos: {', '.join(missing_fields)}"
-            }), 400
-        
-        comment = data['comentario'].strip()
-        categoria = data['categoria'].strip()
-        tags = data['tags']
-        
+        # Validaciones
         if not comment:
             return jsonify({
-                "error": "El comentario no puede estar vacío"
+                "error": "El parámetro 'comentario' es requerido"
+            }), 400
+        
+        if not categoria:
+            return jsonify({
+                "error": "El parámetro 'categoria' es requerido"
             }), 400
         
         valid_categories = ["Sugerencia", "Opinion", "Queja", "Vida universitaria"]
         if categoria not in valid_categories:
             return jsonify({
                 "error": f"Categoría inválida. Categorías válidas: {valid_categories}"
-            }), 400
-        
-        if not isinstance(tags, list):
-            return jsonify({
-                "error": "Los tags deben ser una lista"
             }), 400
         
         analysis_data = {
