@@ -4,13 +4,5 @@ streamlit
 python-dotenv
 flask
 flask-cors
-<<<<<<< HEAD
 gunicorn
-=======
-<<<<<<< Updated upstream
-gunicorn
->>>>>>> e0afa2a (Subiendo bien requirements)
-=======
-gunicorn==23.0.0
->>>>>>> 513456d (Subiendo la API del modelo)
->>>>>>> Stashed changes
+requests
