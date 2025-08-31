@@ -1,0 +1,233 @@
+[
+  {
+    "timestamp": "2025-08-30T15:32:18.348336",
+    "comentario": "s frustrante cuando los profesores suben el material de clase el mismo día o pocas horas antes. Necesitamos tiempo para prepararnos y revisar el contenido previamente.",
+    "categoria": "Sugerencia",
+    "tags": [
+      "clases"
+    ],
+    "analisis": "**Análisis del Comentario**\n\n**Resumen**: El usuario expresa frustración por la práctica de que los profesores suban el material de clase con poco tiempo de anticipación, lo que no permite un adecuado preparativo y revisión del contenido.\n\n**Nivel de sentimiento**: Negativo\n\n**Puntos clave mencionados**:\n\n* Frustración por la falta de tiempo para prepararse y revisar el contenido.\n* Necesidad de tener tiempo previo para prepararse antes de que se publique el material de clase."
+  },
+  {
+    "timestamp": "2025-08-30T15:34:52.581912",
+    "comentario": "Los equipos del laboratorio de química necesitan urgentemente una actualización. Algunos están fuera de servicio desde hace meses y afecta nuestro aprendizaje práctico.",
+    "categoria": "Vida universitaria",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T15:35:36.763074",
+    "comentario": "El maestro de progra es una mierda",
+    "categoria": "HateSpeech",
+    "tags": [
+      "maestros"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:17:57.393480",
+    "comentario_original": "este maestro es una mierda",
+    "comentario_final": "Comentario original: \"este maestro es una mierda\"\n\nVersión formalizada: \"Tengo algunas inquietudes sobre la forma en que se está explicando el material. ¿Podríamos discutir algunas formas de mejorar la comprensión y la claridad de la enseñanza?\"",
+    "categoria": "HateSpeech",
+    "tags": [
+      "maestros"
+    ],
+    "fue_formalizado": true
+  },
+  {
+    "timestamp": "2025-08-30T17:30:36.737773",
+    "comentario": "Me gustaría recibir retroalimentación sobre la forma en que se imparte el curso del profesor Serlio, particularmente en relación con la evaluación y la calificación. ¿Hay áreas específicas en las que se podría mejorar la comunicación o la claridad del material? ",
+    "categoria": "Sugerencia",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:34:55.563596",
+    "comentario": "Considero que la implementación del Ing. Sergio en el proyecto ha requerido un mayor esfuerzo en la comunicación y la colaboración. Me gustaría discutir posibles mejoras en su enfoque para lograr un mejor resultado.",
+    "categoria": "HateSpeech",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:35:40.280951",
+    "comentario": "Me gustaría recibir mayor claridad y orientación en el curso de programación 3. Algunas de las explicaciones han sido difusas para mí, y creo que con un enfoque más estructurado, podría entender mejor los conceptos.",
+    "categoria": "HateSpeech",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:36:05.386928",
+    "comentario": "Es frustrante cuando los profesores suben el material de clase el mismo día o pocas horas antes. Necesitamos tiempo para prepararnos y revisar el contenido previamente.",
+    "categoria": "Sugerencia",
+    "tags": [
+      "clases"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:37:07.817022",
+    "comentario": "Acabo de regresar de mi intercambio en España y quería compartir mi experiencia. Fue increíble tanto académicamente como personalmente. Si alguien está considerando aplicar, les recomiendo 100% que lo hagan.",
+    "categoria": "Opinion",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:44:48.779058",
+    "comentario": "Acabo de regresar de mi intercambio en España y quería compartir mi experiencia. Fue increíble tanto académicamente como personalmente. Si alguien está considerando aplicar, les recomiendo 100% que lo hagan.",
+    "categoria": "Opinion",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:45:22.603779",
+    "comentario": "Acabo de regresar de mi intercambio en España y quería compartir mi experiencia. Fue increíble tanto académicamente como personalmente. Si alguien está considerando aplicar, les recomiendo 100% que lo hagan.",
+    "categoria": "Opinion",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:48:20.763823",
+    "comentario": "El maestro de matemáticas es muy bueno",
+    "categoria": "HateSpeech",
+    "tags": [
+      "matemáticas",
+      "maestros"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:49:05.513064",
+    "comentario": "El Ing Cesar es el mejor maestro que pudimos tener en toda la carrera!!",
+    "categoria": "HateSpeech",
+    "tags": [
+      "carrera",
+      "maestros"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:49:22.683056",
+    "comentario": "Acabo de regresar de mi intercambio en España y quería compartir mi experiencia. Fue increíble tanto académicamente como personalmente. Si alguien está considerando aplicar, les recomiendo 100% que lo hagan.",
+    "categoria": "Opinion",
+    "tags": [
+      "intercambio",
+      "experiencias"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:52:47.527630",
+    "comentario": "El ingSerlio es el mejor",
+    "categoria": "Sugerencia",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:52:58.501884",
+    "comentario": "El ingSerlio es el mejor que pudimos tener",
+    "categoria": "Opinion",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T17:53:10.133735",
+    "comentario": "El maestro de matemáticas es muy bueno",
+    "categoria": "Opinion",
+    "tags": [
+      "matemáticas",
+      "maestros"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T17:53:24.027927",
+    "comentario": "El Ing Cesar es el mejor maestro que pudimos tener en toda la carrera!!",
+    "categoria": "Opinion",
+    "tags": [
+      "maestros",
+      "carrera"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:06:57.577007",
+    "comentario": "El licenciado Ramon Gerardo es un buen maestro ya que explica todo de manera explicita\n",
+    "categoria": "Opinion",
+    "tags": [
+      "maestros"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:13:47.481127",
+    "comentario": "Hola",
+    "categoria": "Opinion",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T19:17:23.518421",
+    "comentario": "casa azul mojado",
+    "categoria": "Vida universitaria",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T19:24:05.617080",
+    "comentario": "Se necesita mejor wifi en el parqueo",
+    "categoria": "Sugerencia",
+    "tags": [
+      "parqueos",
+      "wifi"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:26:08.857734",
+    "comentario": "Me encanta el miembro masculino, sabe a jamon",
+    "categoria": "HateSpeech",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T19:26:59.884157",
+    "comentario": "El Ing Franklin es una mierda y lo deberian de despedir",
+    "categoria": "HateSpeech",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T19:27:07.783198",
+    "comentario": "El Ing Franklin es una mierda y lo deberian de despedir",
+    "categoria": "HateSpeech",
+    "tags": []
+  },
+  {
+    "timestamp": "2025-08-30T19:30:24.102081",
+    "comentario": "Me gustaría expresar mi insatisfacción con el desempeño del Ing. Franklin y sugiero que se evalúen sus métodos para mejorar el rendimiento. Considero que sería beneficioso para la institución explorar alternativas para asegurar un mejor desempeño. Esto podría incluir capacitación adicional o una reevaluación del rol dentro de la organización.",
+    "categoria": "HateSpeech",
+    "tags": [
+      "capacitación"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:37:11.436261",
+    "comentario": "Me gustaría sugerir que el personal de servicios generales podría recibir capacitación adicional para mejorar su atención al cliente y ofrecer un servicio más amigable. Esto podría contribuir a una experiencia más positiva para todos. Sería beneficioso explorar formas de apoyar su desarrollo profesional.",
+    "categoria": "HateSpeech",
+    "tags": [
+      "capacitación",
+      "desarrollo",
+      "experiencias"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:38:58.720564",
+    "comentario": "La comida de cherrys es muy deliciosa",
+    "categoria": "Opinion",
+    "tags": [
+      "comida"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:53:09.044058",
+    "comentario": "Me gustaría expresar mi insatisfacción con el desempeño del profesor Ing. Franklin, considero que su enfoque pedagógico no ha sido efectivo para mí. Sugiero una revisión de sus métodos de enseñanza para mejorar la experiencia de aprendizaje.",
+    "categoria": "HateSpeech",
+    "tags": [
+      "experiencias",
+      "profesores"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T19:59:41.146333",
+    "comentario": "Me gustaría expresar mi insatisfacción con el desempeño del profesor Ing. Franklin, considero que su enfoque pedagógico no ha sido efectivo para mí. Sugiero una revisión de sus métodos de enseñanza para mejorar la experiencia de aprendizaje.",
+    "categoria": "Sugerencia",
+    "tags": [
+      "experiencias",
+      "profesores"
+    ]
+  },
+  {
+    "timestamp": "2025-08-30T20:01:00.844854",
+    "comentario": "me gusta Serlio giron es bien lindo",
+    "categoria": "Opinion",
+    "tags": []
+  }
+]
