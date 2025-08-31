@@ -427,6 +427,95 @@ def procesar_comentario_actual():
 
 
 
+@app.route('/procesar', methods=['POST'])
+def recibir_y_procesar_comentario():
+    """Endpoint que recibe un comentario y lo procesa automáticamente con IA en una sola llamada"""
+    global comentario_actual
+    
+    try:
+        # 1. RECIBIR EL COMENTARIO (igual que el POST /comentario)
+        data = request.get_json() if request.is_json else {}
+        
+        # Extraer el comentario de data
+        if 'comentario' in data:
+            comentario_recibido = data['comentario']
+        elif 'text' in data:
+            comentario_recibido = data['text']
+        elif isinstance(data, str):
+            comentario_recibido = data
+        else:
+            # Si data tiene solo un valor string, usarlo
+            if len(data) == 1:
+                comentario_recibido = list(data.values())[0]
+            else:
+                comentario_recibido = str(data)
+        
+        if not comentario_recibido or comentario_recibido.strip() == "":
+            return jsonify({
+                "error": "Se requiere un comentario válido"
+            }), 400
+        
+        # Establecer como comentario actual temporalmente
+        comentario_actual = comentario_recibido.strip()
+        
+        # 2. PROCESAR EL COMENTARIO (igual que el GET /comentario)
+        
+        # 2.1. Validar coherencia del texto
+        is_coherent = is_coherent_text(comentario_actual)
+        
+        if not is_coherent:
+            # Limpiar comentario actual si no es coherente
+            comentario_actual = None
+            return jsonify({
+                "error": "El comentario no es coherente o no tiene suficiente contenido válido",
+                "comentario_recibido": comentario_recibido
+            }), 400
+        
+        # 2.2. Categorizar el comentario
+        categoria = categorize_comment(comentario_actual)
+        
+        # 2.3. Extraer tags
+        tags = extract_tags_from_text(comentario_actual, available_tags)
+        
+        # 2.4. Si es una queja (hate speech), formalizarlo
+        comentario_formalizado = None
+        
+        if categoria == "Queja":
+            comentario_formalizado = formalize_hate_speech(comentario_actual)
+        
+        # 2.5. Crear el análisis completo
+        analysis_data = {
+            "id": len(load_analysis_history()) + 1,
+            "timestamp": datetime.now().isoformat(),
+            "comentario_original": comentario_actual,
+            "comentario_formalizado": comentario_formalizado,  # Solo si es Queja
+            "categoria": categoria,
+            "tags": tags,
+            "is_coherent": is_coherent
+        }
+        
+        # 2.6. Guardar el análisis
+        if save_to_json(analysis_data):
+            # Limpiar el comentario actual después de procesarlo
+            comentario_actual = None
+            
+            return jsonify({
+                "success": True,
+                "data": analysis_data,
+                "message": "Comentario recibido, procesado y analizado exitosamente en una sola operación"
+            })
+        else:
+            comentario_actual = None
+            return jsonify({
+                "error": "Error al guardar el análisis"
+            }), 500
+            
+    except Exception as e:
+        comentario_actual = None
+        return jsonify({
+            "error": f"Error interno del servidor: {str(e)}"
+        }), 500
+
 # Manejo de errores globales
 @app.errorhandler(404)
 def not_found(error):
