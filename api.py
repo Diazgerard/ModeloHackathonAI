@@ -359,53 +359,39 @@ def obtener_comentario_actual():
     })
 
 @app.route('/comentario', methods=['GET'])
-def enviar_analisis():
-    """Endpoint para enviar el análisis del comentario (comentario + categoría + tags)"""
+def procesar_comentario_actual():
+    """Endpoint para procesar automáticamente el comentario actual con IA"""
+    global comentario_actual
     
     try:
-        # Para GET, obtenemos los datos de los query parameters
-        comment = request.args.get('comentario', '').strip()
-        categoria = request.args.get('categoria', '').strip()
-        tags_param = request.args.get('tags', '')
-        
-        # Convertir tags de string a lista (formato: "tag1,tag2,tag3")
-        if tags_param:
-            tags = [tag.strip() for tag in tags_param.split(',') if tag.strip()]
-        else:
-            tags = []
-        
-        # Validaciones
-        if not comment:
+        # Verificar que hay un comentario actual
+        if comentario_actual is None:
             return jsonify({
-                "error": "El parámetro 'comentario' es requerido"
-            }), 400
+                "error": "No hay comentario disponible para procesar. Envía primero un comentario con POST."
+            }), 404
         
-        if not categoria:
-            return jsonify({
-                "error": "El parámetro 'categoria' es requerido"
-            }), 400
+        # Procesar el comentario con IA
+        categoria = categorize_comment(comentario_actual)
+        tags = extract_tags_from_text(comentario_actual, available_tags)
         
-        valid_categories = ["Sugerencia", "Opinion", "Queja", "Vida universitaria"]
-        if categoria not in valid_categories:
-            return jsonify({
-                "error": f"Categoría inválida. Categorías válidas: {valid_categories}"
-            }), 400
-        
+        # Crear el análisis completo
         analysis_data = {
             "id": len(load_analysis_history()) + 1,
             "timestamp": datetime.now().isoformat(),
-            "comentario": comment,
+            "comentario": comentario_actual,
             "categoria": categoria,
             "tags": tags
         }
         
+        # Guardar el análisis
         if save_to_json(analysis_data):
+            # Limpiar el comentario actual después de procesarlo
             comentario_actual = None
             
             return jsonify({
                 "success": True,
                 "data": analysis_data,
-                "message": "Análisis del comentario guardado exitosamente"
+                "message": "Comentario procesado y analizado exitosamente"
             })
         else:
             return jsonify({
