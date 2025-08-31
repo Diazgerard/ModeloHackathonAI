@@ -312,7 +312,7 @@ def obtener_comentario():
         # Para POST, podemos aceptar parámetros en JSON para filtrar o configurar la respuesta
         data = request.get_json() if request.is_json else {}
         
-        if comentario_actual is None:
+        if data is None:
             return jsonify({
                 "error": "No hay comentario disponible en este momento"
             }), 404
@@ -320,7 +320,7 @@ def obtener_comentario():
         return jsonify({
             "success": True,
             "data": {
-                "comentario": comentario_actual
+                "comentario": data
             }
         })
     
