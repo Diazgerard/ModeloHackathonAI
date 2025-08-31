@@ -297,6 +297,11 @@ available_tags = load_tags()
 
 # RUTAS DE LA API
 
+@app.route("/")
+def home():
+    return jsonify({"message": "Servidor activo"}), 200
+
+
 # Variable global para almacenar el comentario actual
 comentario_actual = None
 
