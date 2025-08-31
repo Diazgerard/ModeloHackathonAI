@@ -227,7 +227,7 @@ def formalize_hate_speech(comment):
     2. Mantener la esencia del mensaje pero en tono constructivo
     3. Usar lenguaje formal y respetuoso
     4. Si es una queja, convertirla en feedback constructivo
-    5. Máximo 2-3 líneas
+    5. Máximo 300 caracteres
     6. Responder SOLO con el texto formalizado, sin explicaciones adicionales
 
     Comentario original: "{comment}"
@@ -293,6 +293,87 @@ def load_analysis_history():
 
 # Cargar tags disponibles
 available_tags = load_tags()
+
+def analyze_title(title):
+    """Analizar título: verificar coherencia, detectar contenido ofensivo y dar recomendación"""
+    
+    # 1. Verificar coherencia básica del título
+    is_coherent = is_coherent_text(title)
+    
+    # 2. Detectar si es ofensivo usando IA
+    offensive_template = """
+    Analiza el siguiente título y determina si contiene contenido ofensivo, discriminatorio, vulgar o inapropiado.
+    
+    Responde EXACTAMENTE con una de estas dos palabras:
+    - "OFENSIVO": Si contiene insultos, discriminación, vulgaridades, lenguaje de odio o contenido inapropiado
+    - "APROPIADO": Si es un título normal y apropiado
+    
+    Título: "{title}"
+    
+    Clasificación:
+    """
+    
+    prompt = ChatPromptTemplate.from_template(offensive_template)
+    chain = prompt | model
+    
+    try:
+        response = ""
+        for chunk in chain.stream({"title": title}):
+            response += chunk.content
+        
+        is_offensive = "OFENSIVO" in response.strip().upper()
+        
+    except Exception as e:
+        print(f"Error detectando contenido ofensivo: {str(e)}")
+        is_offensive = False
+    
+    # 3. Generar recomendación basada en el análisis
+    recommendation_template = """
+    Analiza el siguiente título y proporciona una recomendación específica.
+    
+    Título: "{title}"
+    Es coherente: {is_coherent}
+    Es ofensivo: {is_offensive}
+    
+    Instrucciones:
+    - Si el título es coherente Y apropiado: Dar una recomendación de mejora o validación positiva
+    - Si el título es incoherente: Sugerir cómo hacerlo más claro y comprensible
+    - Si el título es ofensivo: Proponer una versión alternativa respetuosa
+    - Mantener la recomendación en 50 caracteres
+    - Ser constructivo y específico
+    
+    Recomendación:
+    """
+    
+    prompt = ChatPromptTemplate.from_template(recommendation_template)
+    chain = prompt | model
+    
+    try:
+        response = ""
+        for chunk in chain.stream({
+            "title": title,
+            "is_coherent": "Sí" if is_coherent else "No",
+            "is_offensive": "Sí" if is_offensive else "No"
+        }):
+            response += chunk.content
+        
+        recommendation = response.strip()
+        
+    except Exception as e:
+        print(f"Error generando recomendación: {str(e)}")
+        if not is_coherent:
+            recommendation = "El título necesita ser más claro y comprensible."
+        elif is_offensive:
+            recommendation = "Se recomienda reformular el título con lenguaje más apropiado y respetuoso."
+        else:
+            recommendation = "El título es apropiado y coherente."
+    
+    return {
+        "is_coherent": is_coherent,
+        "is_offensive": is_offensive,
+        "recommendation": recommendation,
+        "status": "apropiado" if (is_coherent and not is_offensive) else "requiere_revision"
+    }
 
 
 # RUTAS DE LA API
@@ -512,6 +593,66 @@ def recibir_y_procesar_comentario():
             
     except Exception as e:
         comentario_actual = None
+        return jsonify({
+            "error": f"Error interno del servidor: {str(e)}"
+        }), 500
+
+@app.route('/procesartitulos', methods=['POST'])
+def procesar_titulo():
+    """Endpoint para analizar títulos: verificar coherencia, detectar contenido ofensivo y dar recomendación"""
+    
+    try:
+        data = request.get_json() if request.is_json else {}
+        
+        # Extraer el título de data
+        if 'titulo' in data:
+            titulo = data['titulo']
+        elif 'title' in data:
+            titulo = data['title']
+        elif 'comentario' in data:  # Por compatibilidad
+            titulo = data['comentario']
+        elif isinstance(data, str):
+            titulo = data
+        else:
+            # Si data tiene solo un valor string, usarlo
+            if len(data) == 1:
+                titulo = list(data.values())[0]
+            else:
+                return jsonify({
+                    "error": "Se requiere un campo 'titulo' o 'title' en el JSON"
+                }), 400
+        
+        if not titulo or titulo.strip() == "":
+            return jsonify({
+                "error": "El título no puede estar vacío"
+            }), 400
+        
+        titulo = titulo.strip()
+        
+        # Analizar el título usando la función específica
+        analysis_result = analyze_title(titulo)
+        
+        # Crear respuesta completa
+        response_data = {
+            "id": len(load_analysis_history()) + 1,
+            "timestamp": datetime.now().isoformat(),
+            "titulo_original": titulo,
+            "es_coherente": analysis_result["is_coherent"],
+            "es_ofensivo": analysis_result["is_offensive"],
+            "recomendacion": analysis_result["recommendation"],
+            "estado": analysis_result["status"]
+        }
+        
+        # Guardar el análisis en el historial
+        save_to_json(response_data, "titulos_analizados.json")
+        
+        return jsonify({
+            "success": True,
+            "data": response_data,
+            "message": "Título analizado exitosamente"
+        })
+        
+    except Exception as e:
         return jsonify({
             "error": f"Error interno del servidor: {str(e)}"
         }), 500
