@@ -327,51 +327,64 @@ def analyze_title(title):
         print(f"Error detectando contenido ofensivo: {str(e)}")
         is_offensive = False
     
-    # 3. Generar recomendación basada en el análisis
-    recommendation_template = """
-    Analiza el siguiente título y proporciona una recomendación específica.
+    # 3. Generar recomendación automática basada en el análisis
+    recommendation = None
+    titulo_sugerido = None
     
-    Título: "{title}"
-    Es coherente: {is_coherent}
-    Es ofensivo: {is_offensive}
-    
-    Instrucciones:
-    - Si el título es coherente Y apropiado: Dar una recomendación de mejora o validación positiva
-    - Si el título es incoherente: Sugerir cómo hacerlo más claro y comprensible
-    - Si el título es ofensivo: Proponer una versión alternativa respetuosa
-    - Mantener la recomendación en 50 caracteres
-    - Ser constructivo y específico
-    
-    Recomendación:
-    """
-    
-    prompt = ChatPromptTemplate.from_template(recommendation_template)
-    chain = prompt | model
-    
-    try:
-        response = ""
-        for chunk in chain.stream({
-            "title": title,
-            "is_coherent": "Sí" if is_coherent else "No",
-            "is_offensive": "Sí" if is_offensive else "No"
-        }):
-            response += chunk.content
+    if not is_coherent:
+        # Si no es coherente, sugerir que lo reformule
+        recommendation = "El título necesita ser más claro y comprensible."
+        titulo_sugerido = None
         
-        recommendation = response.strip()
+    elif is_offensive:
+        # Si es ofensivo, generar automáticamente una versión apropiada
+        fix_template = """
+        El siguiente título contiene contenido ofensivo. Genera una versión alternativa que sea:
+        1. Respetuosa y apropiada
+        2. Mantenga la esencia del mensaje original
+        3. Sea clara y profesional
+        4. Máximo 50 caracteres
         
-    except Exception as e:
-        print(f"Error generando recomendación: {str(e)}")
-        if not is_coherent:
-            recommendation = "El título necesita ser más claro y comprensible."
-        elif is_offensive:
-            recommendation = "Se recomienda reformular el título con lenguaje más apropiado y respetuoso."
-        else:
-            recommendation = "El título es apropiado y coherente."
+        Título ofensivo: "{title}"
+        
+        Responde SOLO con el título corregido, sin explicaciones adicionales.
+        
+        Título corregido:
+        """
+        
+        prompt = ChatPromptTemplate.from_template(fix_template)
+        chain = prompt | model
+        
+        try:
+            response = ""
+            for chunk in chain.stream({"title": title}):
+                response += chunk.content
+            
+            titulo_sugerido = response.strip()
+            
+            # Limpiar comillas si las tiene
+            if titulo_sugerido.startswith('"') and titulo_sugerido.endswith('"'):
+                titulo_sugerido = titulo_sugerido[1:-1]
+            elif titulo_sugerido.startswith("'") and titulo_sugerido.endswith("'"):
+                titulo_sugerido = titulo_sugerido[1:-1]
+            
+            recommendation = f"Título corregido automáticamente"
+            
+        except Exception as e:
+            print(f"Error generando título corregido: {str(e)}")
+            titulo_sugerido = "Título modificado por contener contenido inapropiado"
+            recommendation = "Título corregido automáticamente"
+    
+    else:
+        # Si es coherente y apropiado, dar validación positiva
+        recommendation = "Título apropiado y coherente"
+        titulo_sugerido = None
     
     return {
         "is_coherent": is_coherent,
         "is_offensive": is_offensive,
         "recommendation": recommendation,
+        "titulo_sugerido": titulo_sugerido,  # Nueva propiedad
         "status": "apropiado" if (is_coherent and not is_offensive) else "requiere_revision"
     }
 
@@ -640,6 +653,7 @@ def procesar_titulo():
             "es_coherente": analysis_result["is_coherent"],
             "es_ofensivo": analysis_result["is_offensive"],
             "recomendacion": analysis_result["recommendation"],
+            "titulo_sugerido": analysis_result["titulo_sugerido"],  # Nuevo campo
             "estado": analysis_result["status"]
         }
         
